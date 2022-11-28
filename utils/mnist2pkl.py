@@ -8,7 +8,7 @@ import torchvision as tv #pytorch 1.4.0, torchvision 0.5.0
 ## TODO: Add comments for updated functions
 
 
-def load_mnist_dset (filepath, download):
+def load_mnist_dset (filepath, download, val_split):
 	mnist_train = tv.datasets.MNIST(filepath, download=download) # Use the torchvision function to get values from MNIST. write "download=True" as an argument if needed, but I am assuming you have the file for versatility's sake.
 	train_X = []
 	train_Y = []
@@ -16,27 +16,34 @@ def load_mnist_dset (filepath, download):
 		train_X.append(np.array(x)) # Convert the MNIST value to numpy.
 		train_Y.append(np.array(y))
 		
-	mnist_val = tv.datasets.MNIST(filepath, train=False, download=download)
-	val_X = []
-	val_Y = []
-	for _, (x, y) in enumerate(mnist_val):
-		val_X.append(np.array(x)) # Convert the MNIST value to numpy.
-		val_Y.append(np.array(y))
+	split_point = int(len(train_Y) * val_split)
+	val_X = train_X[split_point:]
+	val_Y = train_Y[split_point:]
+	
+	train_X = train_X[:split_point]
+	train_Y = train_Y[:split_point]
 		
-	return (np.array(train_X), np.array(train_Y)), (np.array(val_X), np.array(val_Y)) # Return the numpy value.
+	mnist_test = tv.datasets.MNIST(filepath, train=False, download=download)
+	test_X = []
+	test_Y = []
+	for _, (x, y) in enumerate(mnist_test):
+		test_X.append(np.array(x)) # Convert the MNIST value to numpy.
+		test_Y.append(np.array(y))
+		
+	return (np.array(train_X), np.array(train_Y)), (np.array(val_X), np.array(val_Y)), (np.array(test_X), np.array(test_Y)) # Return the numpy value.
 
 
-def pickle_dict(train_data, val_data, filepath, filename):
+def pickle_dict(train_data, val_data, test_data, filepath, filename):
 	complete_path = os.path.join(filepath, filename) # Concatenate the filepath and filename to get the file destination.
 	
-	dset_dict = {"train": train_data, "valid": val_data}
+	dset_dict = {"train": train_data, "valid": val_data, "test": test_data}
 	
 	with open(complete_path, 'wb') as f: # open the file for writing.
 		pkl.dump(dset_dict, f, pkl.HIGHEST_PROTOCOL) # dump the pkl values.
 
-def mnist2pkl(mnistFilepath, pklFilepath, pklFilename, download=False):
-	train, val = load_mnist_dset(mnistFilepath, download=download) # Run the mnist2numpy function to get the numpy value.
-	pickle_dict(train, val, pklFilepath, pklFilename) # Use the numpy value with the numpy2pkl function to get the pkl file.
+def mnist2pkl(mnistFilepath, pklFilepath, pklFilename, download=False, val_split=0.8):
+	train, val, test = load_mnist_dset(mnistFilepath, download=download, val_split=val_split) # Run the mnist2numpy function to get the numpy value.
+	pickle_dict(train, val, test, pklFilepath, pklFilename) # Use the numpy value with the numpy2pkl function to get the pkl file.
 
 
 if __name__ == "__main__":
