@@ -1,10 +1,10 @@
 {
-    "dfile": "./data/gas.pkl",
-    "dimension": 10,
-    "act_size": 11,
+    "dfile": "./data/cube.pkl",
+    "dimension": 20,
+    "act_size": 21,
     "episode_workers": 2000,
     "acquisition_cost": 0.001,
-    "model_dir": "./exp/gas",
+    "model_dir": "./exp/cube",
     "num_heads": 4,
     "num_induced_points": -1,
     "embed_type": "set",
@@ -28,5 +28,5 @@
     "log_freq": 1,
     "eval_freq": 100,
     "save_freq": 1,
-    "exp_dir": "./exp/gas"
+    "exp_dir": "./exp/cube"
 }
