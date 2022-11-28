@@ -12,6 +12,9 @@ def get_dataset(split, hps):
     elif hps.dataset == 'cube':
         from .cube import Dataset
         dataset = Dataset(hps.dfile, split, hps.batch_size)
+    elif hps.dataset == 'mnist':
+        from .mnist import Dataset
+        dataset = Dataset(hps.dfile, split, hps.batch_size)
     elif hps.dataset == 'env':
         from .env import Dataset
         dataset = Dataset(hps.dfile, split, hps.batch_size)

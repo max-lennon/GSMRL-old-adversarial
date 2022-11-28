@@ -20,8 +20,8 @@ def load_mnist_dset (filepath, download):
 	val_X = []
 	val_Y = []
 	for _, (x, y) in enumerate(mnist_val):
-		train_X.append(np.array(x)) # Convert the MNIST value to numpy.
-		train_Y.append(np.array(y))
+		val_X.append(np.array(x)) # Convert the MNIST value to numpy.
+		val_Y.append(np.array(y))
 		
 	return (np.array(train_X), np.array(train_Y)), (np.array(val_X), np.array(val_Y)) # Return the numpy value.
 

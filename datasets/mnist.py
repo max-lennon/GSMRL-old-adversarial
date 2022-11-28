@@ -24,8 +24,9 @@ class Dataset(object):
         with open(dfile, 'rb') as f:
             data_dict = pickle.load(f)
         data, label = data_dict[split]
+
         self.size = data.shape[0]
-        self.d = data.shape[1]
+        self.d = data.shape[1] * data.shape[2]
         self.num_batches = math.ceil(self.size / batch_size)
 
         ind = tf.range(self.size, dtype=tf.int64)
